@@ -14,12 +14,12 @@ def main():
     soup = BeautifulSoup(response.text, 'html.parser')
     for link in soup.find_all('a', href=True):
         href = link['href']
-        if re.search(r'\.mp3$', href):
+        if re.search(r'\.(mp3|m4a)$', href):
             rq = requests.get(href, headers=headers)
             try:
-                with open(os.path.abspath(f"./tracks/{normalize_filename(link.text)}.mp3"), "wb") as file:
+                with open(os.path.abspath(f"./tracks/{normalize_filename(link.text)}.{href.split('.')[-1]}"), "wb") as file:
                     file.write(rq.content)
-                    print(f"wrote {normalize_filename(link.text)}.mp3 to disk")
+                    print(f"wrote {normalize_filename(link.text)}.{href.split('.')[-1]} to disk")
             except Exception as e:
                 print(f"An error occurred: {e}")
 
